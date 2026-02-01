@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SANKET - R.COMBO QC Mode</title>
+    <style>
+        :root { --accent: #00ff88; --bg: #121212; }
+        body { background: var(--bg); color: white; font-family: sans-serif; padding: 20px; }
+        .grid { display: grid; grid-template-columns: 350px 1fr; gap: 20px; }
+        .panel { background: #1e1e1e; padding: 20px; border-radius: 10px; border: 1px solid #333; }
+        .upload-btn { border: 2px dashed #444; padding: 20px; text-align: center; cursor: pointer; }
+        h2 { color: var(--accent); margin-top: 0; }
+        .badge { background: var(--accent); color: black; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
+    </style>
+</head>
+<body>
+
+<div class="grid">
+    <div class="panel">
+        <h2>🚆 R.COMBO QC</h2>
+        <p>Total Files: <b>04</b> | Year: <b>2026</b></p>
+        
+        <div class="upload-btn" onclick="document.getElementById('cpmbo_file').click()">
+            Step 1: Upload R.COMBO CSV
+            <input type="file" id="cpmbo_file" style="display:none" accept=".csv">
+        </div>
+        <div id="status" style="margin-top:10px; font-size:12px; color:#888;"></div>
+
+        <div style="margin-top:20px;">
+            <label>Master Search (LP/ALP):</label>
+            <input type="text" id="mSearch" placeholder="Enter ID..." style="width:100%; padding:8px; margin-top:5px;">
+        </div>
+    </div>
+    
+    <div class="panel" id="map_container">
+        <div id="map" style="height: 500px; background: #111;"></div>
+    </div>
+</div>
+
+<script type="module">
+    import { processRtisCombo } from '../src/processors/rtis_handler.js';
+
+    document.getElementById('cpmbo_file').addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        const text = await file.text();
+        
+        // APPLYING ODD ROW FILTER
+        const cleanData = processRtisCombo(text);
+        
+        document.getElementById('status').innerHTML = 
+            `<span class="badge">LOGIC ACTIVE</span> Rows halved for analysis.`;
+    });
+</script>
+
+</body>
+</html>
